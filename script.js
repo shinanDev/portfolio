@@ -28,8 +28,8 @@ const handleActiveNav = () => {
   });
 };
 
-handleActiveNav();
-window.addEventListener("scroll", handleActiveNav);
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const scrollBehavior = prefersReducedMotion ? "auto" : "smooth";
 
 const smoothScroll = e => {
   const targetId = e.currentTarget.getAttribute("href");
@@ -37,7 +37,7 @@ const smoothScroll = e => {
     e.preventDefault();
     const section = document.querySelector(targetId);
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      section.scrollIntoView({ behavior: scrollBehavior });
     }
     closeMenu();
   }
@@ -46,16 +46,24 @@ const smoothScroll = e => {
 navLinks.forEach(link => link.addEventListener("click", smoothScroll));
 
 const backToTop = document.querySelector(".back-to-top");
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 400) {
-    backToTop.classList.add("visible");
-  } else {
-    backToTop.classList.remove("visible");
-  }
-});
+
+// One scroll handler, batched to one run per animation frame
+let scrollTicking = false;
+const onScroll = () => {
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    handleActiveNav();
+    backToTop.classList.toggle("visible", window.scrollY > 400);
+    scrollTicking = false;
+  });
+};
+
+handleActiveNav();
+window.addEventListener("scroll", onScroll, { passive: true });
 
 backToTop.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: scrollBehavior });
 });
 
 const hamburger = document.querySelector(".hamburger");

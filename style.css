@@ -453,7 +453,7 @@ section p {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   gap: 2rem;
 }
 
@@ -590,15 +590,102 @@ section p {
   transform: translateY(-4px);
 }
 
-.reveal {
+.project-meta {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+  margin: 0 0 0.4rem;
+}
+
+.project-body h3 {
+  margin-top: 0;
+}
+
+.project-card.featured {
+  grid-column: 1 / -1;
+  border-color: rgba(156, 84, 30, 0.6);
+}
+
+.project-link {
+  margin: 0 1.8rem 1.8rem;
+  align-self: flex-start;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+.project-link:hover,
+.project-link:focus-visible {
+  text-decoration: underline;
+}
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.cert-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+a.cert-card:hover,
+a.cert-card:focus-visible {
+  border-color: var(--accent-primary);
+  transform: translateY(-6px);
+}
+
+.cert-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.cert-issuer {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.cert-verify {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+}
+
+/* Content stays visible if JavaScript does not run */
+.js .reveal {
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (max-width: 900px) {
